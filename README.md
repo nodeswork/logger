@@ -5,7 +5,7 @@ A wrapper on top of winston, to be shared across all nodeswork repos.
 ## Installation
 
 ```sh
-$ npm i -S nodeswork/logger
+$ npm i -S @nodeswork/logger
 ```
 
 ## How to use
