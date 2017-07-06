@@ -19,7 +19,7 @@ logger object at the top of the file where it is used.
 ### Default Logger
 
 ```javascript
-{logger} = require('logger');
+{ logger } = require('logger');
 
 logger.info("This is a test log.");
 logger.error("Want to see an error log.");
@@ -38,7 +38,7 @@ nwLogger.addLogger 'requestLog', transports: [
   }
 ]
 
-{requestLog} = require 'logger'
+{ requestLog } = require 'logger'
 
 requestLog.info "Another one without timestamp."
 ```
