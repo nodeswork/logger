@@ -28,28 +28,38 @@ logger.error("Want to see an error log.");
 
 ### Create new logger using customized transports
 
-```coffeescript
-winston    = require 'winston'
-{ logger } = require 'logger'
+```javascript
+winston    = require('winston');
+{ logger } = require('logger');
 
-logger.define 'requestLog', transports: [
-  logger.transport winston.transports.Console, {
+logger.define('requestLog', transports: [
+  logger.transport(winston.transports.Console, {
     colorize: true
-  }
-]
+  })
+]);
 
-{ requestLog } = require 'logger'
+{ requestLog } = require('logger');
 
-requestLog.info "Another one without timestamp."
+requestLog.info("Another one without timestamp.");
 ```
 
 ### Add a new transport
 
-```coffeescript
-winston    = require 'winston'
-{ logger } = require 'logger'
+```javascript
+winston    = require('winston');
+{ logger } = require('logger');
 
-logger.transports.push logger.transport winston.transports.Console, {
+logger.transports.push(logger.transport(winston.transports.Console, {
   colorize: true
-}
+}));
+```
+
+### Reset the label
+
+```javascript
+winston    = require('winston');
+{ logger } = require('logger');
+
+logger.resetLabel(3); // set the 4th file name in the call stack as label
+logger.resetLabel('labelString'); // set 'labelString' as the label
 ```
