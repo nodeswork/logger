@@ -29,11 +29,11 @@ logger.error("Want to see an error log.");
 ### Create new logger using customized transports
 
 ```coffeescript
-winston  = require 'winston'
-nwLogger = require 'logger'
+winston    = require 'winston'
+{ logger } = require 'logger'
 
-nwLogger.addLogger 'requestLog', transports: [
-  nwLogger.transport winston.transports.Console, {
+logger.define 'requestLog', transports: [
+  logger.transport winston.transports.Console, {
     colorize: true
   }
 ]
@@ -41,4 +41,15 @@ nwLogger.addLogger 'requestLog', transports: [
 { requestLog } = require 'logger'
 
 requestLog.info "Another one without timestamp."
+```
+
+### Add a new transport
+
+```coffeescript
+winston    = require 'winston'
+{ logger } = require 'logger'
+
+logger.transports.push logger.transport winston.transports.Console, {
+  colorize: true
+}
 ```
