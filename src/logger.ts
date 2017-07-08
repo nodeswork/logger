@@ -1,7 +1,13 @@
 import * as _ from 'underscore'
+import * as winston from 'winston'
 
-const winston: any = require('winston');
 const ErrorStackParser: any = require('error-stack-parser');
+
+
+export interface LoggerInstance extends winston.LoggerInstance {
+  label: string
+  resetLabel(labelOption: LabelOption): string
+}
 
 
 export interface WinstonTransportConstructor {
@@ -19,7 +25,7 @@ export interface Transport {
   opts:  object
 }
 
-type LabelOption = number | string;
+export type LabelOption = number | string;
 
 
 function getLabelFromCallStack(labelOption: LabelOption = 1) {
@@ -37,8 +43,6 @@ function getLabelFromCallStack(labelOption: LabelOption = 1) {
 
 
 class Logger {
-
-  static Logger: object = Logger;
 
   transports: Array<Transport>;
 
@@ -59,9 +63,12 @@ class Logger {
               return new cls(_.extend({label}, opts));
             });
 
-            let winstonLogger = new winston.Logger(
-              _.extend({}, options, { transports: winstonTransports })
+            let winstonLogger: LoggerInstance = <LoggerInstance>(
+              new winston.Logger(
+                _.extend({}, options, { transports: winstonTransports })
+              )
             );
+
             winstonLogger.label = label;
 
             winstonLogger.resetLabel = (labelOption: LabelOption) => {
@@ -78,6 +85,10 @@ class Logger {
           }
         }
       })
+  }
+
+  getLogger(name: string): LoggerInstance {
+    return <LoggerInstance>(<any>this)[name];
   }
 
   transport(cls: WinstonTransportConstructor, opts: object): Transport {
