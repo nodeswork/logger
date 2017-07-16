@@ -44,7 +44,9 @@ function getLabelFromCallStack(labelOption: LabelOption = 1) {
 
 class Logger {
 
+  level:      string = 'info';
   transports: Array<Transport>;
+  logger:     LoggerInstance;
 
   constructor(options: LoggerOption = {}) {
     this.transports = _.union(options.transports);
@@ -65,7 +67,11 @@ class Logger {
 
             let winstonLogger: LoggerInstance = <LoggerInstance>(
               new winston.Logger(
-                _.extend({}, options, { transports: winstonTransports })
+                _.extend(
+                  { level: this.level },
+                  options,
+                  { transports: winstonTransports }
+                )
               )
             );
 
