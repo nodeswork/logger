@@ -27,38 +27,51 @@ logger.info("This is a test log.");
 logger.error("Want to see an error log.");
 ```
 
-
-### Create new logger using customized transports
+### Add MongoDB Transport
 
 ```javascript
 // Javascript
 
-winston    = require('winston');
-{ logger } = require('logger');
+var winstonMongoDB = require('winston-mongodb');
+var nwLogger       = require('@nodeswork/logger');
 
-logger.define('requestLog', transports: [
-  logger.transport(winston.transports.Console, {
-    colorize: true
+nwLogger.level     = process.env == 'production' ? 'warn' : 'info';
+nwLogger.transports.push(
+  nwLogger.transport(winston.transports.MongoDB, {
+    db:         mongoose.connections[0].db,
+    collection: 'logs',
   })
-]);
-
-{ requestLog } = require('logger');
-
-requestLog.info("Another one without timestamp.");
+);
 ```
 
-### Add a new transport
+### Setup Requests Log
 
 ```javascript
 // Javascript
 
-winston    = require('winston');
-{ logger } = require('logger');
+var dailyRotate    = require('winston-daily-rotate-file');
 
-logger.transports.push(logger.transport(winston.transports.Console, {
-  colorize: true
-}));
+nwLogger.define('requestLogger', {
+  level:        'info',
+  transports: [
+    nwLogger.transport(winston.transports.MongoDB, {
+      db:         mongoose.connections[0].db,
+      collection: 'logs.requests',
+    }),
+    nwLogger.transport(winston.transports.DailyRotateFile, {
+      filename:     './requests.log',
+      datePattern:  'yyyy-MM-dd.',
+      json:         false,
+      prepend:      true,
+    }),
+  ],
+});
+
+var { requestLog } = require('logger');
+
+requestLog.info("This is a request.");
 ```
+
 
 ### Reset the label
 
