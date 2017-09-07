@@ -26,8 +26,6 @@
   },
   "homepage": "https://github.com/nodeswork/logger#readme",
   "dependencies": {
-    "@types/underscore": "^1.8.0",
-    "@types/winston": "^2.3.3",
     "error-stack-parser": "^2.0.1",
     "underscore": "^1.8.3"
   },
@@ -36,6 +34,8 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.8",
+    "@types/underscore": "^1.8.0",
+    "@types/winston": "^2.3.3",
     "chai": "^4.0.2",
     "coffeescript": "^2.0.0-beta3",
     "gulp": "^3.9.1",

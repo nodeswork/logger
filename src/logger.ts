@@ -3,7 +3,6 @@ import * as winston from 'winston'
 
 const ErrorStackParser: any = require('error-stack-parser');
 
-
 export interface LoggerInstance extends winston.LoggerInstance {
   label: string
   resetLabel(labelOption: LabelOption): string
@@ -11,12 +10,13 @@ export interface LoggerInstance extends winston.LoggerInstance {
 
 
 export interface WinstonTransportConstructor {
-  new (optoins: any): Object
+  new (options: any): Object
 }
 
 
 export interface LoggerOption {
-  transports?: Array<Transport>
+  level?:       string;
+  transports?:  Array<Transport>;
 }
 
 
@@ -44,12 +44,21 @@ function getLabelFromCallStack(labelOption: LabelOption = 1) {
 
 class Logger {
 
-  level:      string = 'info';
+  level:      string;
   transports: Array<Transport>;
-  logger:     LoggerInstance;
 
   constructor(options: LoggerOption = {}) {
     this.transports = _.union(options.transports);
+    this.level      = options.level || 'info';
+  }
+
+  configure(options: LoggerOption = {}) {
+    if (options.transports) {
+      this.transports = options.transports;
+    }
+    if (options.level) {
+      this.level = options.level;
+    }
   }
 
   define(name: string, options: LoggerOption = {}): void {
@@ -85,15 +94,16 @@ class Logger {
               }
               winstonLogger.label = label;
               return label;
-            }
+            };
 
             return winstonLogger;
-          }
-        }
-      })
+          },
+        },
+      },
+    );
   }
 
-  getLogger(name: string): LoggerInstance {
+  getLogger(name: string = 'logger'): LoggerInstance {
     return <LoggerInstance>(<any>this)[name];
   }
 
