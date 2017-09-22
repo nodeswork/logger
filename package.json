@@ -1,6 +1,6 @@
 {
   "name": "@nodeswork/logger",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A wrapper on top of winston, to be shared across all nodeswork repos.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
