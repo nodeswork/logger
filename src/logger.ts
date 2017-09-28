@@ -1,6 +1,7 @@
-import * as _ from 'underscore'
+import * as _       from 'underscore'
 import * as winston from 'winston'
 
+const DEFAULT_LEVEL = process.env.DEBUG ? 'debug' : 'info';
 const ErrorStackParser: any = require('error-stack-parser');
 
 export interface LoggerInstance extends winston.LoggerInstance {
@@ -8,17 +9,14 @@ export interface LoggerInstance extends winston.LoggerInstance {
   resetLabel(labelOption: LabelOption): string
 }
 
-
 export interface WinstonTransportConstructor {
   new (options: any): Object
 }
-
 
 export interface LoggerOption {
   level?:       string;
   transports?:  Array<Transport>;
 }
-
 
 export interface Transport {
   cls:   WinstonTransportConstructor
@@ -26,7 +24,6 @@ export interface Transport {
 }
 
 export type LabelOption = number | string;
-
 
 function getLabelFromCallStack(labelOption: LabelOption = 1) {
   if (_.isString(labelOption)) {
@@ -41,7 +38,6 @@ function getLabelFromCallStack(labelOption: LabelOption = 1) {
   return stacks[<number>labelOption] || 'unkown';
 }
 
-
 class Logger {
 
   level:      string;
@@ -49,7 +45,7 @@ class Logger {
 
   constructor(options: LoggerOption = {}) {
     this.transports = _.union(options.transports);
-    this.level      = options.level || 'info';
+    this.level      = options.level || DEFAULT_LEVEL;
   }
 
   configure(options: LoggerOption = {}) {
@@ -111,6 +107,5 @@ class Logger {
     return { cls, opts }
   }
 }
-
 
 export default Logger
